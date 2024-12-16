@@ -20,27 +20,16 @@ class ReservationController extends Controller
 
     public function store(ReservationRequest $request): JsonResponse
     {
-        return $this->handleResponse(
-            fn() => $this->service->createReservation($request->validated()),
-            201
-        );
+        return $this->handleResponse(fn() => $this->service->createReservation($request->validated()), 201);
     }
 
-    public function confirmReservation(int $reservationId): JsonResponse
+    public function confirm($id): JsonResponse
     {
-        return $this->handleResponse(
-            fn() => $this->service->confirmReservation($reservationId),
-            200,
-            'Reservation not found.'
-        );
+        return $this->handleResponse(fn() => $this->service->confirmReservation($id), 200, 'Reservation not found.');
     }
 
-    public function destroy(int $id): JsonResponse
+    public function cancel($id): JsonResponse
     {
-        return $this->handleResponse(
-            fn() => $this->service->cancelReservation($id),
-            200,
-            'Reservation not found.'
-        );
+        return $this->handleResponse(fn() => $this->service->cancelReservation($id), 200, 'Reservation not found.');
     }
 }

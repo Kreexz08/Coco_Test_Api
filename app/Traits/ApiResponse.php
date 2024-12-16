@@ -30,6 +30,12 @@ trait ApiResponse
 
     private function errorResponse(string $message, int $status): JsonResponse
     {
-        return response()->json(['error' => $message], $status);
+        return response()->json([
+            'error' => [
+                'message' => $message,
+                'status' => $status,
+                'timestamp' => now()->toDateTimeString(),
+            ]
+        ], $status);
     }
 }
