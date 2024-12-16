@@ -28,7 +28,7 @@ class ReservationController extends Controller
         return $this->handleResponse(fn() => $this->service->confirmReservation($id), 200, 'Reservation not found.');
     }
 
-    public function cancel($id): JsonResponse
+    public function destroy($id): JsonResponse
     {
         return $this->handleResponse(fn() => $this->service->cancelReservation($id), 200, 'Reservation not found.');
     }

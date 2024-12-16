@@ -29,7 +29,7 @@ class ReservationRepository
         return $reservation;
     }
 
-    public function cancel(int $id): bool
+    public function delete(int $id): bool
     {
         $reservation = $this->findOrFail($id);
         $reservation->update(['status' => 'cancelled']);

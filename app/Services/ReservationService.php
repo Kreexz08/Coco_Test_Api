@@ -48,7 +48,7 @@ class ReservationService
 
     public function cancelReservation(int $id)
     {
-        $success = $this->repository->cancel($id);
+        $success = $this->repository->delete($id);
         return [
             'message' => 'Reservation successfully canceled.',
             'success' => $success,
