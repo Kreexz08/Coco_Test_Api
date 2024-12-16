@@ -28,13 +28,4 @@ class ReservationRequest extends FormRequest
         ];
     }
 
-    public function messages()
-    {
-        return [
-            'reserved_at.required' => 'The reserved_at field is required.',
-            'reserved_at.date_format' => 'The reserved_at field must be in Y-m-d H:i:s format.',
-            'duration.required' => 'The duration field is required.',
-            'duration.date_format' => 'The duration field must be in H:i:s format.',
-        ];
-    }
 }
