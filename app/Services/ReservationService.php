@@ -2,18 +2,22 @@
 
 namespace App\Services;
 
-use App\Repositories\ReservationRepository;
-use App\Services\ResourceService;
+use App\Contracts\ReservationRepositoryInterface as ContractsReservationRepositoryInterface;
+use App\Contracts\ReservationServiceInterface as ContractsReservationServiceInterface;
+use App\Contracts\ResourceServiceInterface;
+use App\resources\Contracts\ResourceServiceInterface as ContractsResourceServiceInterface;
 use Carbon\Carbon;
 use Exception;
 
-class ReservationService
+class ReservationService implements ContractsReservationServiceInterface
 {
     protected $repository;
     protected $resourceService;
 
-    public function __construct(ReservationRepository $repository, ResourceService $resourceService)
-    {
+    public function __construct(
+        ContractsReservationRepositoryInterface $repository,
+        ResourceServiceInterface $resourceService
+    ) {
         $this->repository = $repository;
         $this->resourceService = $resourceService;
     }

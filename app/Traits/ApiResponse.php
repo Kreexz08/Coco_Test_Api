@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 trait ApiResponse
 {
-    /**
-     * Maneja una respuesta API y captura excepciones comunes.
-     */
     private function handleResponse(
         callable $callback,
         int $successStatus = 200,

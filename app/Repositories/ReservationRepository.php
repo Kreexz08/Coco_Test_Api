@@ -3,11 +3,12 @@
 namespace App\Repositories;
 
 use App\Factories\ReservationFactory;
+use App\Contracts\ReservationRepositoryInterface;
 use App\Models\Reservation;
 
-class ReservationRepository
+class ReservationRepository implements ReservationRepositoryInterface
 {
-    protected $model;
+    protected Reservation $model;
 
     public function __construct(Reservation $reservation)
     {
@@ -18,7 +19,6 @@ class ReservationRepository
     {
         $reservation = ReservationFactory::create($data);
         $reservation->save();
-
         return $reservation;
     }
 

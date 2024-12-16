@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ResourceServiceInterface as ContractsResourceServiceInterface;
 use App\Http\Requests\ResourceRequest;
-use App\Services\ResourceService;
+use App\Resources\Contracts\ResourceServiceInterface;
+use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Traits\ApiResponse;
 
 class ResourceController extends Controller
 {
     use ApiResponse;
 
-    protected $service;
+    protected ContractsResourceServiceInterface $service;
 
-    public function __construct(ResourceService $service)
+    public function __construct(ContractsResourceServiceInterface $service)
     {
         $this->service = $service;
     }
@@ -24,7 +25,7 @@ class ResourceController extends Controller
         return $this->handleResponse(fn() => $this->service->getAllResources());
     }
 
-    public function show($id): JsonResponse
+    public function show(int $id): JsonResponse
     {
         return $this->handleResponse(fn() => $this->service->getResourceById($id), 200, 'Resource not found.');
     }
@@ -34,12 +35,12 @@ class ResourceController extends Controller
         return $this->handleResponse(fn() => $this->service->createResource($request->validated()), 201);
     }
 
-    public function update(ResourceRequest $request, $id): JsonResponse
+    public function update(ResourceRequest $request, int $id): JsonResponse
     {
         return $this->handleResponse(fn() => $this->service->updateResource($id, $request->validated()), 200, 'Resource not found.');
     }
 
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
         return $this->handleResponse(fn() => $this->service->deleteResource($id), 204, 'Resource not found.');
     }

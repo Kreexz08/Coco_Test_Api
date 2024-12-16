@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\ReservationServiceInterface as ContractsReservationServiceInterface;
 use App\Http\Requests\ReservationRequest;
-use App\Services\ReservationService;
+use App\Services\Contracts\ReservationServiceInterface;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
 
@@ -13,7 +14,7 @@ class ReservationController extends Controller
 
     protected $service;
 
-    public function __construct(ReservationService $service)
+    public function __construct(ContractsReservationServiceInterface $service)
     {
         $this->service = $service;
     }
