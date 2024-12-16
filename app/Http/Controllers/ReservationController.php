@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ReservationRequest;
-use App\Repositories\ReservationRepository;
+use App\Services\ReservationService;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
 
@@ -11,31 +11,36 @@ class ReservationController extends Controller
 {
     use ApiResponse;
 
-    protected $repository;
+    protected $service;
 
-    public function __construct(ReservationRepository $repository)
+    public function __construct(ReservationService $service)
     {
-        $this->repository = $repository;
+        $this->service = $service;
     }
 
     public function store(ReservationRequest $request): JsonResponse
     {
-        return $this->handleResponse(fn() => $this->repository->create($request->validated()), 201);
+        return $this->handleResponse(
+            fn() => $this->service->createReservation($request->validated()),
+            201
+        );
     }
 
-    public function confirmReservation($reservationId): JsonResponse
+    public function confirmReservation(int $reservationId): JsonResponse
     {
-        return $this->handleResponse(fn() => [
-            'message' => 'Reservation confirmed successfully.',
-            'reservation' => $this->repository->confirm($reservationId),
-        ], 200, 'Reservation not found.');
+        return $this->handleResponse(
+            fn() => $this->service->confirmReservation($reservationId),
+            200,
+            'Reservation not found.'
+        );
     }
 
-    public function destroy($id): JsonResponse
+    public function destroy(int $id): JsonResponse
     {
-        return $this->handleResponse(fn() => [
-            'message' => 'Reservation successfully canceled.',
-            'success' => $this->repository->cancel($id),
-        ], 200, 'Reservation not found.');
+        return $this->handleResponse(
+            fn() => $this->service->cancelReservation($id),
+            200,
+            'Reservation not found.'
+        );
     }
 }
