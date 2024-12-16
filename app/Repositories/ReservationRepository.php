@@ -5,51 +5,59 @@ namespace App\Repositories;
 
 use App\Factories\ReservationFactory;
 use App\Models\Reservation;
-use App\Models\Resource;
+use App\Repositories\ResourceRepository;
 use FFI\Exception;
 
 class ReservationRepository
 {
     protected $model;
+    protected $resourceRepository;
 
-    public function __construct(Reservation $reservation)
+    public function __construct(Reservation $reservation, ResourceRepository $resourceRepository)
     {
         $this->model = $reservation;
+        $this->resourceRepository = $resourceRepository;
     }
 
     public function create(array $data)
     {
-        $resource = Resource::findOrFail($data['resource_id']);
+        // Convertir el valor de 'reserved_at' a formato DateTime
+        $reservedAt = \Carbon\Carbon::parse($data['reserved_at']);
 
-        $isAvailable = $resource->reservations()
-            ->where('status', '!=', 'cancelled')
-            ->where(function ($query) use ($data) {
-                $start = $data['reserved_at'];
-                $end = strtotime("+{$data['duration']} seconds", strtotime($data['reserved_at']));
-
-                $query->where(function ($subQuery) use ($start, $end) {
-                    $subQuery->where('reserved_at', '<=', $start)
-                        ->whereRaw('DATE_ADD(reserved_at, INTERVAL TIME_TO_SEC(duration) SECOND) > ?', [$start]);
-                })->orWhere(function ($subQuery) use ($start, $end) {
-                    $subQuery->where('reserved_at', '<', $end)
-                        ->whereRaw('DATE_ADD(reserved_at, INTERVAL TIME_TO_SEC(duration) SECOND) > ?', [$start]);
-                });
-            })
-            ->doesntExist();
+        // Verificar si el recurso está disponible utilizando el ResourceRepository
+        $isAvailable = $this->resourceRepository->checkAvailability(
+            $data['resource_id'],
+            $data['reserved_at'],
+            $data['duration']
+        );
 
         if (!$isAvailable) {
-            throw new Exception('Resource is not available for the selected time.');
+            throw new Exception('El recurso no está disponible en el horario seleccionado.');
         }
 
-        $reservation = ReservationFactory::create($data);
-        $reservation->save();
+        // Usar la Fábrica para crear la reserva
+        $data['reserved_at'] = $reservedAt; // Asegurarse de que el formato sea correcto
+        $data['duration'] = $data['duration']; // Esto ya debería ser un string de tipo "HH:MM:SS"
+        $data['status'] = 'pending';
 
+        $reservation = ReservationFactory::create($data);
+        $reservation->save();  // Guardar la reserva
+
+        return $reservation;
+    }
+
+    public function confirm(int $reservationId)
+    {
+        $reservation = $this->model->findOrFail($reservationId);
+        $reservation->status = 'confirmed';
+        $reservation->save();
         return $reservation;
     }
 
     public function cancel($id)
     {
         $reservation = $this->model->findOrFail($id);
+        // Cambiar el estado de la reserva a 'cancelled'
         $reservation->update(['status' => 'cancelled']);
         return true;
     }

@@ -9,6 +9,8 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+
 
 class ResourceController extends Controller
 {
@@ -75,20 +77,37 @@ class ResourceController extends Controller
         }
     }
 
-    public function availability(int $id, CheckResourceAvailabilityRequest $request): JsonResponse
+    public function availability(int $id, Request $request): JsonResponse
     {
+        $datetime = $request->query('datetime');
+        $duration = $request->query('duration');
+
+        if (!$datetime || !$duration) {
+            return response()->json(['error' => 'datetime and duration are required.'], 400);
+        }
+
+        if (!$this->isValidDurationFormat($duration)) {
+            return response()->json(['error' => 'Invalid duration format, expected HH:MM:SS.'], 400);
+        }
+
         try {
             $availability = $this->repository->checkAvailability(
                 $id,
-                $request->datetime,
-                $request->duration
+                $datetime,
+                $duration
             );
 
             return response()->json(['available' => $availability]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['error' => 'Resource not found.'], 404);
         } catch (Exception $e) {
+            Log::error("Error checking availability: " . $e->getMessage());
             return response()->json(['error' => 'Failed to check availability.'], 500);
         }
+    }
+
+    private function isValidDurationFormat(string $duration): bool
+    {
+        return preg_match('/^\d{2}:\d{2}:\d{2}$/', $duration);
     }
 }

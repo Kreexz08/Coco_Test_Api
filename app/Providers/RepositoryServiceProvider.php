@@ -4,8 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use App\Repositories\ResourceRepository;
-use App\Factories\ResourceFactory;
 use App\Repositories\ReservationRepository;
+use App\Models\Resource;
+use App\Models\Reservation;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -13,12 +14,12 @@ class RepositoryServiceProvider extends ServiceProvider
     {
         // Registrar ResourceRepository
         $this->app->bind(ResourceRepository::class, function ($app) {
-            return new ResourceRepository(new \App\Models\Resource());
+            return new ResourceRepository(new Resource());
         });
 
         // Registrar ReservationRepository
         $this->app->bind(ReservationRepository::class, function ($app) {
-            return new ReservationRepository(new \App\Models\Reservation());
+            return new ReservationRepository(new Reservation(), $app->make(ResourceRepository::class));
         });
     }
 }

@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Factories\ResourceFactory;
 use App\Models\{Resource, Reservation};
+use Illuminate\Support\Facades\Log;
 use Exception;
 
 class ResourceRepository
@@ -49,22 +50,45 @@ class ResourceRepository
 
     public function checkAvailability(int $id, string $datetime, string $duration): bool
     {
-        $resource = $this->find($id);
+        try {
+            // Convertir el datetime a una instancia de Carbon
+            $start = \Carbon\Carbon::parse($datetime);
 
-        return $resource->reservations()
-            ->where('status', '!=', 'cancelled')
-            ->where(function ($query) use ($datetime, $duration) {
-                $start = $datetime;
-                $end = strtotime("+$duration seconds", strtotime($datetime));
+            // Dividir la duración y convertir a enteros
+            $durationParts = explode(':', $duration);
+            $hours = (int) $durationParts[0];
+            $minutes = (int) $durationParts[1];
+            $seconds = (int) $durationParts[2];
 
-                $query->where(function ($subQuery) use ($start, $end) {
-                    $subQuery->where('reserved_at', '<=', $start)
-                        ->whereRaw('DATE_ADD(reserved_at, INTERVAL TIME_TO_SEC(duration) SECOND) > ?', [$start]);
-                })->orWhere(function ($subQuery) use ($start, $end) {
-                    $subQuery->where('reserved_at', '<', $end)
-                        ->whereRaw('DATE_ADD(reserved_at, INTERVAL TIME_TO_SEC(duration) SECOND) > ?', [$start]);
-                });
-            })
-            ->doesntExist();
+            // Agregar la duración a la fecha de inicio (en segundos)
+            $end = $start->copy()->addHours($hours)
+                ->addMinutes($minutes)
+                ->addSeconds($seconds);
+
+            // Buscar el recurso
+            $resource = $this->find($id);
+
+            if (!$resource) {
+                throw new \Exception("Resource not found");
+            }
+
+            // Verificar si el recurso tiene reservas que se superpongan con la nueva reserva
+            return $resource->reservations()
+                ->where('status', '!=', 'cancelled') // Solo considerar reservas no canceladas
+                ->where(function ($query) use ($start, $end) {
+                    // Comprobar si la nueva reserva se superpone con reservas existentes
+                    $query->where(function ($subQuery) use ($start, $end) {
+                        $subQuery->where('reserved_at', '<', $end)
+                            ->whereRaw('reserved_at + (duration::interval) > ?', [$start]);  // Ajuste en la consulta
+                    })->orWhere(function ($subQuery) use ($start, $end) {
+                        $subQuery->where('reserved_at', '>=', $start)
+                            ->whereRaw('reserved_at + (duration::interval) > ?', [$start]);  // Ajuste en la consulta
+                    });
+                })
+                ->doesntExist(); // Si no hay superposición de reservas, el recurso está disponible
+        } catch (\Exception $e) {
+            Log::error('Error checking availability: ' . $e->getMessage());
+            return false;
+        }
     }
 }
