@@ -26,6 +26,7 @@ class ReservationRepository implements ReservationRepositoryInterface
     {
         $reservation = $this->findOrFail($reservationId);
         $reservation->update(['status' => 'confirmed']);
+        $reservation->refresh();
         return $reservation;
     }
 
