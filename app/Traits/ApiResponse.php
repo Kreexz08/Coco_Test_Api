@@ -24,13 +24,10 @@ trait ApiResponse
             return $this->errorResponse($notFoundMessage, 404);
         } catch (Exception $e) {
             Log::error('Error: ' . $e->getMessage());
-            return $this->errorResponse($e->getMessage(), 400); // Cambia según el contexto
+            return $this->errorResponse($e->getMessage(), 400);
         }
     }
 
-    /**
-     * Retorna una respuesta de error estandarizada.
-     */
     private function errorResponse(string $message, int $status): JsonResponse
     {
         return response()->json(['error' => $message], $status);
