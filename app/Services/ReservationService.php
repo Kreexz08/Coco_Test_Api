@@ -2,20 +2,23 @@
 
 namespace App\Services;
 
-use App\Contracts\ReservationRepositoryInterface as ContractsReservationRepositoryInterface;
+use App\Contracts\ReservationRepositoryInterface;
 use App\Contracts\ReservationServiceInterface;
 use App\Contracts\ResourceServiceInterface;
+use App\Exceptions\ReservationAlreadyCancelledException;
+use App\Exceptions\ReservationAlreadyConfirmedException;
+use App\Exceptions\ReservationNotFoundException;
+use App\Exceptions\ResourceUnavailableException;
 use App\Models\Reservation;
 use Carbon\Carbon;
-use Exception;
 
 class ReservationService implements ReservationServiceInterface
 {
-    protected ContractsReservationRepositoryInterface $repository;
+    protected ReservationRepositoryInterface $repository;
     protected ResourceServiceInterface $resourceService;
 
     public function __construct(
-        ContractsReservationRepositoryInterface $repository,
+        ReservationRepositoryInterface $repository,
         ResourceServiceInterface $resourceService
     ) {
         $this->repository = $repository;
@@ -33,7 +36,7 @@ class ReservationService implements ReservationServiceInterface
         );
 
         if (!$isAvailable) {
-            throw new Exception('The resource is not available at the selected time.');
+            throw new ResourceUnavailableException();
         }
 
         $data['reserved_at'] = $reservedAt;
@@ -46,12 +49,8 @@ class ReservationService implements ReservationServiceInterface
     {
         $reservation = $this->repository->findReservationById($reservationId);
 
-        if (!$reservation) {
-            throw new Exception('Reservation not found.');
-        }
-
         if ($reservation->status === 'confirmed') {
-            throw new Exception('Reservation is already confirmed.');
+            throw new ReservationAlreadyConfirmedException();
         }
 
         $this->repository->confirmReservation($reservationId);
@@ -66,12 +65,8 @@ class ReservationService implements ReservationServiceInterface
     {
         $reservation = $this->repository->findReservationById($id);
 
-        if (!$reservation) {
-            throw new Exception('Reservation not found.');
-        }
-
         if ($reservation->status === 'cancelled') {
-            throw new Exception('Reservation is already cancelled.');
+            throw new ReservationAlreadyCancelledException();
         }
 
         $this->repository->cancelReservation($id);

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\ResourceServiceInterface as ContractsResourceServiceInterface;
+use App\Contracts\ResourceServiceInterface;
 use App\Http\Requests\ResourceRequest;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -12,9 +12,9 @@ class ResourceController extends Controller
 {
     use ApiResponse;
 
-    protected ContractsResourceServiceInterface $service;
+    protected ResourceServiceInterface $service;
 
-    public function __construct(ContractsResourceServiceInterface $service)
+    public function __construct(ResourceServiceInterface $service)
     {
         $this->service = $service;
     }
@@ -49,6 +49,7 @@ class ResourceController extends Controller
         return $this->handleResponse(function () use ($id, $request) {
             $datetime = $request->query('datetime');
             $duration = $request->query('duration');
+
             return [
                 'available' => $this->service->checkResourceAvailability($id, $datetime, $duration),
             ];

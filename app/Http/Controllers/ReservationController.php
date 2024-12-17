@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Contracts\ReservationServiceInterface as ContractsReservationServiceInterface;
+use App\Contracts\ReservationServiceInterface;
 use App\Http\Requests\ReservationRequest;
-use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 
 class ReservationController extends Controller
 {
     use ApiResponse;
 
-    protected $service;
+    protected ReservationServiceInterface $service;
 
-    public function __construct(ContractsReservationServiceInterface $service)
+    public function __construct(ReservationServiceInterface $service)
     {
         $this->service = $service;
     }
@@ -23,14 +23,13 @@ class ReservationController extends Controller
         return $this->handleResponse(fn() => $this->service->createReservation($request->all()), 201);
     }
 
-
     public function confirm($id): JsonResponse
     {
-        return $this->handleResponse(fn() => $this->service->confirmReservation($id), 200, 'Reservation not found.');
+        return $this->handleResponse(fn() => $this->service->confirmReservation($id));
     }
 
     public function destroy($id): JsonResponse
     {
-        return $this->handleResponse(fn() => $this->service->cancelReservation($id), 200, 'Reservation not found.');
+        return $this->handleResponse(fn() => $this->service->cancelReservation($id));
     }
 }

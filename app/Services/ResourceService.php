@@ -4,9 +4,10 @@ namespace App\Services;
 
 use App\Contracts\ResourceRepositoryInterface;
 use App\Contracts\ResourceServiceInterface;
+use App\Exceptions\InvalidResourceDataException;
+use App\Exceptions\ResourceUnavailableException;
 use App\Models\Resource;
 use Carbon\Carbon;
-use Exception;
 
 class ResourceService implements ResourceServiceInterface
 {
@@ -45,50 +46,43 @@ class ResourceService implements ResourceServiceInterface
     public function checkResourceAvailability(int $id, string $datetime, string $duration): bool
     {
         $this->validateDatetimeAndDuration($datetime, $duration);
-        $start = $this->parseDatetime($datetime);
+
+        $start = Carbon::parse($datetime);
         $end = $this->calculateEndDatetime($start, $duration);
+
         $this->validateBusinessHours($start, $end);
-        return $this->checkReservationAvailability($id, $start, $end);
-    }
 
-    private function validateDatetimeAndDuration(string $datetime, string $duration)
-    {
-        if (!$datetime || !$duration || !$this->isValidDurationFormat($duration)) {
-            throw new Exception('Invalid datetime or duration format.');
-        }
-    }
-
-    private function validateBusinessHours(Carbon $start, Carbon $end)
-    {
-        if ($start->format('H:i:s') < '09:00:00' || $end->format('H:i:s') > '18:00:00') {
-            throw new Exception('Resource is only available between 9:00 AM and 6:00 PM.');
-        }
-        if ($start->isWeekend() || $end->isWeekend()) {
-            throw new Exception('Resource is not available on weekends.');
-        }
-    }
-
-    private function parseDatetime(string $datetime): Carbon
-    {
-        return Carbon::parse($datetime);
-    }
-
-    private function calculateEndDatetime(Carbon $start, string $duration): Carbon
-    {
-        [$hours, $minutes, $seconds] = array_map('intval', explode(':', $duration));
-        return $start->copy()->addHours($hours)->addMinutes($minutes)->addSeconds($seconds);
-    }
-
-    private function checkReservationAvailability(int $id, Carbon $start, Carbon $end): bool
-    {
-        $resource = $this->repository->getResourceById($id);
-        return !$resource->reservations()
+        return !$this->repository->getResourceById($id)->reservations()
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($start, $end) {
                 $query->where('reserved_at', '<', $end)
                     ->whereRaw('reserved_at + (duration::interval) > ?', [$start]);
             })
             ->exists();
+    }
+
+    private function validateDatetimeAndDuration(string $datetime, string $duration)
+    {
+        if (!$datetime || !$duration || !$this->isValidDurationFormat($duration)) {
+            throw new InvalidResourceDataException('Invalid datetime or duration format.');
+        }
+    }
+
+    private function validateBusinessHours(Carbon $start, Carbon $end)
+    {
+        if ($start->format('H:i:s') < '09:00:00' || $end->format('H:i:s') > '18:00:00') {
+            throw new ResourceUnavailableException('Resource is only available between 9:00 AM and 6:00 PM.');
+        }
+
+        if ($start->isWeekend() || $end->isWeekend()) {
+            throw new ResourceUnavailableException('Resource is not available on weekends.');
+        }
+    }
+
+    private function calculateEndDatetime(Carbon $start, string $duration): Carbon
+    {
+        [$hours, $minutes, $seconds] = array_map('intval', explode(':', $duration));
+        return $start->copy()->addHours($hours)->addMinutes($minutes)->addSeconds($seconds);
     }
 
     private function isValidDurationFormat(string $duration): bool

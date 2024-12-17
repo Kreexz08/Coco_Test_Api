@@ -22,23 +22,26 @@ class ReservationRepository implements ReservationRepositoryInterface
         return $reservation;
     }
 
-    public function confirmReservation(int $reservationId): Reservation
+    public function confirmReservation(int $id): Reservation
     {
-        $reservation = $this->findReservationById($reservationId);
-        $reservation->update(['status' => 'confirmed']);
-        $reservation->refresh();
-        return $reservation;
+        return $this->updateReservationStatus($id, 'confirmed');
     }
 
     public function cancelReservation(int $id): bool
     {
-        $reservation = $this->findReservationById($id);
-        $reservation->update(['status' => 'cancelled']);
+        $this->updateReservationStatus($id, 'cancelled');
         return true;
     }
 
     public function findReservationById(int $id): Reservation
     {
         return $this->model->findOrFail($id);
+    }
+
+    protected function updateReservationStatus(int $id, string $status): Reservation
+    {
+        $reservation = $this->findReservationById($id);
+        $reservation->update(['status' => $status]);
+        return $reservation;
     }
 }
