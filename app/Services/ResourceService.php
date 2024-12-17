@@ -5,9 +5,11 @@ namespace App\Services;
 use App\Contracts\ResourceRepositoryInterface;
 use App\Contracts\ResourceServiceInterface;
 use App\Exceptions\InvalidResourceDataException;
+use App\Exceptions\ResourceAlreadyExistsException;
 use App\Exceptions\ResourceUnavailableException;
 use App\Models\Resource;
 use Carbon\Carbon;
+use Illuminate\Database\QueryException;
 
 class ResourceService implements ResourceServiceInterface
 {
@@ -30,7 +32,14 @@ class ResourceService implements ResourceServiceInterface
 
     public function createResource(array $data): Resource
     {
-        return $this->repository->createResource($data);
+        try {
+            return $this->repository->createResource($data);
+        } catch (QueryException $e) {
+            if ($e->getCode() === '23505') {
+                throw new ResourceAlreadyExistsException();
+            }
+            throw $e;
+        }
     }
 
     public function updateResource(int $id, array $data): Resource
@@ -46,12 +55,9 @@ class ResourceService implements ResourceServiceInterface
     public function checkResourceAvailability(int $id, string $datetime, string $duration): bool
     {
         $this->validateDatetimeAndDuration($datetime, $duration);
-
         $start = Carbon::parse($datetime);
         $end = $this->calculateEndDatetime($start, $duration);
-
         $this->validateBusinessHours($start, $end);
-
         return !$this->repository->getResourceById($id)->reservations()
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($start, $end) {

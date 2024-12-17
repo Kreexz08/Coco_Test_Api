@@ -9,6 +9,7 @@ use App\Exceptions\ReservationAlreadyCancelledException;
 use App\Exceptions\ReservationAlreadyConfirmedException;
 use App\Exceptions\ReservationNotFoundException;
 use App\Exceptions\ReservationStatusException;
+use App\Exceptions\ResourceAlreadyExistsException;
 use Illuminate\Http\JsonResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -28,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             ReservationAlreadyConfirmedException::class,
             ReservationNotFoundException::class,
             ReservationStatusException::class,
+            ResourceAlreadyExistsException::class,
         ]);
 
         $exceptions->report(function (ResourceUnavailableException $exception) {
@@ -40,6 +42,17 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $exceptions->report(function (ReservationAlreadyCancelledException $exception) {
             \Illuminate\Support\Facades\Log::warning("Reservation already cancelled: " . $exception->getMessage());
+        });
+
+        $exceptions->report(function (ResourceAlreadyExistsException $exception) { // Reportar la nueva excepción
+            \Illuminate\Support\Facades\Log::warning("Resource already exists: " . $exception->getMessage());
+        });
+
+        $exceptions->render(function (ReservationNotFoundException $exception) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => $exception->getMessage(),
+            ], 404); 
         });
 
         $exceptions->render(function (ResourceUnavailableException $exception) {
@@ -70,14 +83,14 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 400);
         });
 
-        $exceptions->render(function (ReservationNotFoundException $exception) {
+        $exceptions->render(function (ReservationStatusException $exception) {
             return new JsonResponse([
                 'success' => false,
                 'message' => $exception->getMessage(),
-            ], 404);
+            ], 400);
         });
 
-        $exceptions->render(function (ReservationStatusException $exception) {
+        $exceptions->render(function (ResourceAlreadyExistsException $exception) {
             return new JsonResponse([
                 'success' => false,
                 'message' => $exception->getMessage(),
@@ -88,7 +101,7 @@ return Application::configure(basePath: dirname(__DIR__))
             return new JsonResponse([
                 'success' => false,
                 'message' => 'Something went wrong.',
-            ], 500); 
+            ], 500);
         });
     })
     ->create();

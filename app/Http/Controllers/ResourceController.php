@@ -49,7 +49,6 @@ class ResourceController extends Controller
         return $this->handleResponse(function () use ($id, $request) {
             $datetime = $request->query('datetime');
             $duration = $request->query('duration');
-
             return [
                 'available' => $this->service->checkResourceAvailability($id, $datetime, $duration),
             ];

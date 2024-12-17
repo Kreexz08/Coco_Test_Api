@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Factories\ReservationFactory;
 use App\Contracts\ReservationRepositoryInterface;
+use App\Exceptions\ReservationNotFoundException;
 use App\Models\Reservation;
 
 class ReservationRepository implements ReservationRepositoryInterface
@@ -13,6 +14,15 @@ class ReservationRepository implements ReservationRepositoryInterface
     public function __construct(Reservation $reservation)
     {
         $this->model = $reservation;
+    }
+
+    public function findReservationById(int $id): Reservation
+    {
+        try {
+            return $this->model->findOrFail($id);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new ReservationNotFoundException("Reservation not found.");
+        }
     }
 
     public function createReservation(array $data): Reservation
@@ -31,11 +41,6 @@ class ReservationRepository implements ReservationRepositoryInterface
     {
         $this->updateReservationStatus($id, 'cancelled');
         return true;
-    }
-
-    public function findReservationById(int $id): Reservation
-    {
-        return $this->model->findOrFail($id);
     }
 
     protected function updateReservationStatus(int $id, string $status): Reservation

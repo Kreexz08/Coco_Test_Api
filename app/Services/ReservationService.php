@@ -25,36 +25,30 @@ class ReservationService implements ReservationServiceInterface
         $this->resourceService = $resourceService;
     }
 
+
     public function createReservation(array $data): Reservation
     {
         $reservedAt = Carbon::parse($data['reserved_at']);
-
         $isAvailable = $this->resourceService->checkResourceAvailability(
             $data['resource_id'],
             $data['reserved_at'],
             $data['duration']
         );
-
         if (!$isAvailable) {
             throw new ResourceUnavailableException();
         }
-
         $data['reserved_at'] = $reservedAt;
         $data['status'] = 'pending';
-
         return $this->repository->createReservation($data);
     }
 
     public function confirmReservation(int $reservationId): array
     {
         $reservation = $this->repository->findReservationById($reservationId);
-
         if ($reservation->status === 'confirmed') {
             throw new ReservationAlreadyConfirmedException();
         }
-
         $this->repository->confirmReservation($reservationId);
-
         return [
             'message' => 'Reservation confirmed successfully.',
             'reservation' => $reservation->refresh(),
@@ -68,9 +62,7 @@ class ReservationService implements ReservationServiceInterface
         if ($reservation->status === 'cancelled') {
             throw new ReservationAlreadyCancelledException();
         }
-
         $this->repository->cancelReservation($id);
-
         return [
             'message' => 'Reservation successfully canceled.',
             'success' => true,
