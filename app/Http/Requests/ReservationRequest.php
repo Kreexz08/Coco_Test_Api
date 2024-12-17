@@ -22,9 +22,9 @@ class ReservationRequest extends FormRequest
     public function rules()
     {
         return [
-            'resource_id' => 'required|exists:resources,id',
-            'reserved_at' => 'required|date_format:Y-m-d H:i:s',
-            'duration' => 'required|date_format:H:i:s', // Formato adecuado de duración
+            'resource_id' => 'required|integer',
+            'reserved_at' => 'required|date',
+            'duration'    => 'required|regex:/^\d{2}:\d{2}:\d{2}$/',
         ];
     }
 

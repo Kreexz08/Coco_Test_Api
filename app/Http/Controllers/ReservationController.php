@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ReservationServiceInterface as ContractsReservationServiceInterface;
 use App\Http\Requests\ReservationRequest;
-use App\Services\Contracts\ReservationServiceInterface;
 use Illuminate\Http\JsonResponse;
 use App\Traits\ApiResponse;
 
@@ -21,8 +20,9 @@ class ReservationController extends Controller
 
     public function store(ReservationRequest $request): JsonResponse
     {
-        return $this->handleResponse(fn() => $this->service->createReservation($request->validated()), 201);
+        return $this->handleResponse(fn() => $this->service->createReservation($request->all()), 201);
     }
+
 
     public function confirm($id): JsonResponse
     {

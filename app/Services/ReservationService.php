@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Contracts\ReservationRepositoryInterface as ContractsReservationRepositoryInterface;
 use App\Contracts\ReservationServiceInterface as ContractsReservationServiceInterface;
 use App\Contracts\ResourceServiceInterface;
-use App\resources\Contracts\ResourceServiceInterface as ContractsResourceServiceInterface;
 use Carbon\Carbon;
 use Exception;
 
@@ -33,7 +32,7 @@ class ReservationService implements ContractsReservationServiceInterface
         );
 
         if (!$isAvailable) {
-            throw new Exception('El recurso no está disponible en el horario seleccionado.');
+            throw new Exception('The resource is not available at the selected time.');
         }
 
         $data['reserved_at'] = $reservedAt;
