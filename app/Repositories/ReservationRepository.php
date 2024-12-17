@@ -15,29 +15,29 @@ class ReservationRepository implements ReservationRepositoryInterface
         $this->model = $reservation;
     }
 
-    public function create(array $data): Reservation
+    public function createReservation(array $data): Reservation
     {
         $reservation = ReservationFactory::create($data);
         $reservation->save();
         return $reservation;
     }
 
-    public function confirm(int $reservationId): Reservation
+    public function confirmReservation(int $reservationId): Reservation
     {
-        $reservation = $this->findOrFail($reservationId);
+        $reservation = $this->findReservationById($reservationId);
         $reservation->update(['status' => 'confirmed']);
         $reservation->refresh();
         return $reservation;
     }
 
-    public function delete(int $id): bool
+    public function cancelReservation(int $id): bool
     {
-        $reservation = $this->findOrFail($id);
+        $reservation = $this->findReservationById($id);
         $reservation->update(['status' => 'cancelled']);
         return true;
     }
 
-    public function findOrFail(int $id): Reservation
+    public function findReservationById(int $id): Reservation
     {
         return $this->model->findOrFail($id);
     }

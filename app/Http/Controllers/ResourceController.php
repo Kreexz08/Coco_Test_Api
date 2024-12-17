@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Contracts\ResourceServiceInterface as ContractsResourceServiceInterface;
 use App\Http\Requests\ResourceRequest;
-use App\Resources\Contracts\ResourceServiceInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

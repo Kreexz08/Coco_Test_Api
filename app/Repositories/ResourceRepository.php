@@ -15,34 +15,34 @@ class ResourceRepository implements ResourceRepositoryInterface
         $this->model = $resource;
     }
 
-    public function all(): iterable
+    public function getAllResources(): iterable
     {
         return $this->model->all();
     }
 
-    public function find(int $id): ?Resource
+    public function getResourceById(int $id): ?Resource
     {
         return $this->model->findOrFail($id);
     }
 
-    public function create(array $data): Resource
+    public function createResource(array $data): Resource
     {
         $resource = ResourceFactory::create($data);
         $resource->save();
         return $resource;
     }
 
-    public function update(int $id, array $data): Resource
+    public function updateResource(int $id, array $data): Resource
     {
-        $resource = $this->find($id);
+        $resource = $this->getResourceById($id);
         $resource->fill($data);
         $resource->save();
         return $resource;
     }
 
-    public function delete(int $id): bool
+    public function deleteResource(int $id): bool
     {
-        $resource = $this->find($id);
+        $resource = $this->getResourceById($id);
         return $resource->delete();
     }
 }

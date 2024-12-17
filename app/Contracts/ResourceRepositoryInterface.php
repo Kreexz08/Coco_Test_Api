@@ -6,13 +6,13 @@ use App\Models\Resource;
 
 interface ResourceRepositoryInterface
 {
-    public function all();
+    public function getAllResources(): iterable;
 
-    public function find(int $id): ?Resource;
+    public function getResourceById(int $id): ?Resource;
 
-    public function create(array $data): Resource;
+    public function createResource(array $data): Resource;
 
-    public function update(int $id, array $data): Resource;
+    public function updateResource(int $id, array $data): Resource;
 
-    public function delete(int $id): bool;
+    public function deleteResource(int $id): bool;
 }

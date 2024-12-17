@@ -6,7 +6,7 @@ use App\Models\Resource;
 
 interface ResourceServiceInterface
 {
-    public function getAllResources();
+    public function getAllResources(): iterable;
 
     public function getResourceById(int $id): ?Resource;
 

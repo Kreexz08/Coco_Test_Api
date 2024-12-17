@@ -6,11 +6,11 @@ use App\Models\Reservation;
 
 interface ReservationRepositoryInterface
 {
-    public function create(array $data): Reservation;
+    public function createReservation(array $data): Reservation;
 
-    public function confirm(int $reservationId): Reservation;
+    public function confirmReservation(int $reservationId): Reservation;
 
-    public function delete(int $id): bool;
+    public function cancelReservation(int $id): bool;
 
-    public function findOrFail(int $id): Reservation;
+    public function findReservationById(int $id): Reservation;
 }
