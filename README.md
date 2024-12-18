@@ -129,27 +129,27 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
     }
     ```
 - **Respuestas erroneas**:
-- En caso de crear un recurso existente:
- - **Código**: `400 Bad Request`
- - **Cuerpo**:
-   ```json
-   {
-    "error": {
-        "message": "A resource with this name already exists.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:02:32"
-            }
-    }
-   ```
-- En caso de no pasar los parametros:
- - **Código**: `500 Internal Server Error`
- - **Cuerpo**:
-   ```json
-     {
-    "success": false,
-    "message": "Something went wrong."
-    }
-   ```
+  - En caso de crear un recurso existente:
+  - **Código**: `400 Bad Request`
+  - **Cuerpo**:
+    ```json
+    {
+     "error": {
+         "message": "A resource with this name already exists.",
+         "status": 400,
+         "timestamp": "2024-12-18 01:02:32"
+             }
+     }
+    ```
+  - En caso de no pasar los parametros:
+  - **Código**: `500 Internal Server Error`
+  - **Cuerpo**:
+    ```json
+      {
+     "success": false,
+     "message": "Something went wrong."
+     }
+    ```
 
 #### Actualizar un recurso
 - **URL**: `/api/resources/{id}`
