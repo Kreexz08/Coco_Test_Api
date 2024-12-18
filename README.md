@@ -53,7 +53,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
 
 - PHP 8.4.1
 - Composer, en este caso se uso la version 2.8.4
-- Base de datos PostgreSQL
+- Base de datos PostgreSQL.
 
 ### Instalación
 
