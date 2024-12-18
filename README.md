@@ -172,7 +172,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
     "updated_at": "2024-12-18T01:10:23.000000Z"
     }
     ```
-  - **Respuesta erronea**:
+- **Respuesta erronea**:
    - **Código**: `200 OK`
    - **Cuerpo**: 
     ```json
@@ -200,36 +200,36 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
      }
      ```
  - ** Si no esta disponible el recurso para esa fecha y hora**:
-  - **Código**: `200 OK`
-  - **Cuerpo**: 
-    ```json
-    {
-      "available": false
-    }
-    ```
+   - **Código**: `200 OK`
+   - **Cuerpo**: 
+     ```json
+     {
+       "available": false
+     }
+     ```
  - **Respuestas erroneas segun el caso de que sea festivo o este fuera de horario para la reserva**
-  - **Código**: `400 Bad Request`
-  - **Cuerpo**:
-    ```json
-    {
-    "error": {
-        "message": "Resource is not available on weekends.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:21:31"
-        }
-    }
-    ```
-    - Tambien puede devolver un cuerpo como este segun el horario establecido, en este caso es de 9:00 AM a 6:00 PM:
-    - **Código**: `400 Bad Request`
-    - **Cuerpo**:
-      ```json
-      {
-        "error": {
-        "message": "Resource is only available between 9:00 AM and 6:00 PM.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:22:58"
-          }
-        }
+   - **Código**: `400 Bad Request`
+   - **Cuerpo**:
+     ```json
+     {
+     "error": {
+         "message": "Resource is not available on weekends.",
+         "status": 400,
+         "timestamp": "2024-12-18 01:21:31"
+         }
+     }
+     ```
+ - **Tambien puede devolver un cuerpo como este segun el horario establecido, en este caso es de 9:00 AM a 6:00 PM**:
+   - **Código**: `400 Bad Request`
+   - **Cuerpo**:
+     ```json
+     {
+       "error": {
+       "message": "Resource is only available between 9:00 AM and 6:00 PM.",
+       "status": 400,
+       "timestamp": "2024-12-18 01:22:58"
+         }
+       }
 
 ### Reservas
 #### Crear una nueva reserva
@@ -243,18 +243,18 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
 - **Respuesta Exitosa**:
   - **Código**: `201 Created`
   - **Cuerpo**: 
-    ```json
-    {
-      "id": 1,
-      "resource_id": 1,
-      "reserved_at": "2024-12-19T14:00:00",
-      "duration": "01:00:00",
-      "status": "pending",
-      "updated_at": "2024-12-18T01:27:57.000000Z",
+     ```json
+     {
+       "id": 1,
+       "resource_id": 1,
+       "reserved_at": "2024-12-19T14:00:00",
+       "duration": "01:00:00",
+       "status": "pending",
+       "updated_at": "2024-12-18T01:27:57.000000Z",
        "created_at": "2024-12-18T01:27:57.000000Z"
-    }
-    ```
- - **Respuestas erroneas**:
+     }
+     ```
+- **Respuestas erroneas**:
   - En su mayoria son las mismas respuestas que devuelve el endpoint para validar si esta disponible en un horario, excepto si intentas reservar en un horario reservado
   - **Código** `400 Bad Request`
   - **Cuerpo**:
@@ -289,28 +289,29 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
     }
     ```
 - **Respuestas erroneas en caso de que no exista la reservacion o ya este confirmada**:
- - **Código**: `400 Bad Request`
- - **Cuerpo**:
-   ```json
-   {
-    "error": {
-        "message": "The reservation is already confirmed.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:30:19"
-        }
-    }
- - **Si no existe la reservacion**:
- - **Código**: `400 Bad Request`
- - **Cuerpo**:
-   ```json
+  - **Código**: `400 Bad Request`
+  - **Cuerpo**:
+    ```json
     {
     "error": {
-        "message": "Reservation not found.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:32:27"
-        }
-    }
-   
+        "message": "The reservation is already confirmed.",
+         "status": 400,
+         "timestamp": "2024-12-18 01:30:19"
+         }
+     }
+    ```
+- **Si no existe la reservacion**:
+  - **Código**: `400 Bad Request`
+  - **Cuerpo**:
+    ```json
+     {
+     "error": {
+         "message": "Reservation not found.",
+         "status": 400,
+         "timestamp": "2024-12-18 01:32:27"
+         }
+     }
+   ```
 #### Cancelar una reserva
 - **URL**: `/api/reservations/{id}`
 - **Método**: `DELETE`
@@ -325,16 +326,16 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
     }
     ```
 - **Respuesta erronea**
- - **Código**: `400 Bad Request`
- - **Cuerpo**:
-   ```json
-    {
-    "error": {
-        "message": "Reservation not found.",
-        "status": 400,
-        "timestamp": "2024-12-18 01:32:27"
-        }
-    }
+  - **Código**: `400 Bad Request`
+  - **Cuerpo**:
+    ```json
+     {
+     "error": {
+         "message": "Reservation not found.",
+         "status": 400,
+         "timestamp": "2024-12-18 01:32:27"
+         }
+     }
  
           
 
