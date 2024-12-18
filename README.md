@@ -264,7 +264,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
         "message": "The resource is not available at the selected time.",
         "status": 400,
         "timestamp": "2024-12-18 01:27:21"
-        }
+     }
     }
   ```
 #### Confirmar una reserva
@@ -334,6 +334,6 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
          "message": "Reservation not found.",
          "status": 400,
          "timestamp": "2024-12-18 01:32:27"
-         }
+        }
      }
     ```
