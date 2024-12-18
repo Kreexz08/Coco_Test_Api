@@ -10,15 +10,17 @@ El proyecto sigue una estructura de directorios estándar de Laravel, con alguna
 
     
     ├── app
-    │   ├── Contracts
-    │   ├── Exceptions
-    │   ├── Factories
+    │   ├── Contracts        # Definición de interfaces para los servicios y repositorios
+    │   ├── Exceptions       # Manejo de errores específicos del dominio
+    │   ├── Factories        # Creación de objetos del dominio
     │   ├── Http
-    │   ├── Models
-    │   ├── Providers
-    │   ├── Repositories
-    │   ├── Services
-    │   └── Traits
+    │   │   ├── Controllers  # Controladores para manejar las solicitudes HTTP
+    │   │   ├── Requests     # Validaciones de solicitudes
+    │   ├── Models           # Modelos de Eloquent para la base de datos
+    │   ├── Providers        # Proveedores de servicios de Laravel
+    │   ├── Repositories     # Implementación del patrón repositorio
+    │   ├── Services         # Lógica de negocio
+    │   └── Traits           # Funcionalidades reutilizables
     ├── bootstrap
     ├── config
     ├── database
@@ -26,8 +28,9 @@ El proyecto sigue una estructura de directorios estándar de Laravel, con alguna
     ├── resources
     ├── routes
     ├── storage
-    ├── tests
+    ├── tests               # Pruebas unitarias y funcionales
     └── vendor
+
 
 
 ### Diseño del Sistema
@@ -45,6 +48,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
 ## Decisiones de Diseño
 
 - **Repositorio y Servicio**: Se eligió este patrón para desacoplar la lógica de negocio de la lógica de acceso a datos, permitiendo una mayor flexibilidad y facilidad de prueba.
+- **Factories**: Utilizamos factories para centralizar y simplificar la creación de objetos. Este patrón evita la repetición de lógica en diferentes partes del código, encapsula detalles de inicialización y facilita futuras extensiones, como agregar relaciones o validaciones específicas.
 - **Inyección de Dependencias**: Utilizamos interfaces para definir contratos que las implementaciones deben cumplir, lo que permite cambiar fácilmente las implementaciones sin afectar el resto del sistema.
 
 ## Instrucciones de Configuración
