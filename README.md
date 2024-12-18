@@ -266,7 +266,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
         "timestamp": "2024-12-18 01:27:21"
         }
     }
-
+  ```
 #### Confirmar una reserva
 - **URL**: `/api/reservations/{id}/confirm`
 - **Método**: `PUT`
