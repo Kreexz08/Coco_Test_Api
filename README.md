@@ -8,7 +8,7 @@ Este proyecto es una API desarrollada con Laravel que gestiona recursos comparti
 
 El proyecto sigue una estructura de directorios estándar de Laravel, con algunas carpetas adicionales para organizar mejor el código:
 
-    ```plaintext
+    ```
     ├── app
     │   ├── Contracts
     │   ├── Exceptions
