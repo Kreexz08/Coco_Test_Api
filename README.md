@@ -78,9 +78,9 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
 7. Inicia el servidor de desarrollo:
    ```bash
    php artisan serve  
-8. Ejecutar las pruebas:
+8. Ejecutar los test, las cuales al ejecutar dan una respuesta descriptiba de lo que hace:
    ```bash
-   php artisan test
+   php artisan test --filter ReservationTest
 
 ## Endpoints de la API
 
