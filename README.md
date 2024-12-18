@@ -1,68 +1,342 @@
+# Test Laravel API
 
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+Este proyecto es una API desarrollada con Laravel que gestiona recursos compartidos y reservas. Está diseñada para ser modular y fácil de mantener, utilizando patrones de diseño como repositorios, factorias y servicios.
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Estructura y Diseño del Sistema
 
-## About Laravel
+### Estructura del Proyecto
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+El proyecto sigue una estructura de directorios estándar de Laravel, con algunas carpetas adicionales para organizar mejor el código:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+├── app
+│   ├── Contracts
+│   ├── Exceptions
+│   ├── Factories
+│   ├── Http
+│   ├── Models
+│   ├── Providers
+│   ├── Repositories
+│   ├── Services
+│   └── Traits
+├── bootstrap
+├── config
+├── database
+├── public
+├── resources
+├── routes
+├── storage
+├── tests
+└── vendor
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Learning Laravel
+### Diseño del Sistema
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+El sistema está diseñado utilizando una arquitectura basada en componentes clave como factorias, repositorios, controladores, interfaces y servicios. Este enfoque permite un alto grado de modularidad, escalabilidad y facilidad de mantenimiento.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Componentes claves del sistema
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+- **Factory**: Se encarga de la creación de objetos complejos, simplificando y centralizando la inicialización de dependencias. Facilita la gestión de instancias y garantiza la coherencia en la configuración.
+- **Repository**: Implementa el patrón de repositorio para gestionar la lógica de acceso a datos, desacoplándola de la lógica de negocio. Este patrón permite realizar operaciones CRUD de manera consistente y facilita la prueba unitaria.
+- **Controller**: Actúa como intermediario entre las solicitudes HTTP y la lógica del sistema, delegando la lógica de negocio a los servicios y las operaciones de datos a los repositorios.
+- **Interface**: Define contratos que aseguran que las implementaciones cumplan con las expectativas del sistema. Promueve la flexibilidad al permitir el intercambio de implementaciones sin impactar otras partes del sistema.
+- **Service**: Contiene la lógica de negocio del sistema. Los servicios interactúan con los repositorios y otras dependencias para cumplir con los requisitos del dominio.
 
-## Laravel Sponsors
+## Decisiones de Diseño
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- **Repositorio y Servicio**: Se eligió este patrón para desacoplar la lógica de negocio de la lógica de acceso a datos, permitiendo una mayor flexibilidad y facilidad de prueba.
+- **Inyección de Dependencias**: Utilizamos interfaces para definir contratos que las implementaciones deben cumplir, lo que permite cambiar fácilmente las implementaciones sin afectar el resto del sistema.
 
-### Premium Partners
+## Instrucciones de Configuración
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+### Requisitos Previos
 
-## Contributing
+- PHP 8.4.1
+- Composer, en este caso se uso la version 2.8.4
+- Base de datos PostgreSQL
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Instalación
 
-## Code of Conduct
+1. Clona el repositorio:
+   ```bash
+   git clone <https://github.com/Kreexz08/Coco_Test_Api>
+   cd Coco_Test_Api
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. Instala las dependencias:
+    ```bash
+    composer install
+3. Copia el archivo de configuración por defecto y ajusta los valores necesarios:
+    ```bash
+    cp .env.example .env
+4. Genera la clave de aplicación:
+   ```bash
+   php artisan key:generate
+5. Configura la base de datos en el archivo .env.
+6. Ejecuta las migraciones para crear las tablas necesarias, en este caso la tabla de resources para almacenar informacion de los resources disponibles y reservations que gestiona las reservaciones relacionadas a dichos recursos:
+   ```bash
+   php artisan migrate
+7. Inicia el servidor de desarrollo:
+   ```bash
+   php artisan serve  
+8. Ejecutar las pruebas:
+   ```bash
+   php artisan test
 
-## Security Vulnerabilities
+## Endpoints de la API
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Recursos
 
-## License
+#### Obtener todos los recursos:
+- **URL**: `/api/resources`
+- **Método**: `GET`
+- **Descripción**: Recupera una lista de todos los recursos disponibles.
+- **Respuesta Exitosa**:
+  - **Código**: `200 OK`
+  - **Cuerpo**: 
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "Sala de reuniones",
+        "description": "Una sala de reuniones para 10 personas",
+        "capacity": 10
+        "updated_at": "2024-12-18T00:56:55.000000Z",
+        "created_at": "2024-12-18T00:56:55.000000Z"
+      },
+      ...
+    ]
+    ```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+#### Crear un nuevo recurso
+- **URL**: `/api/resources`
+- **Método**: `POST`
+- **Descripción**: Crea un nuevo recurso.
+- **Parámetros**:
+  - `name` (string, requerido): Nombre del recurso.
+  - `description` (string, requerido): Descripción del recurso.
+  - `capacity` (integer, opcional, por defecto 1): Capacidad del recurso.
+- **Respuesta Exitosa**:
+  - **Código**: `201 Created`
+  - **Cuerpo**: 
+    ```json
+    {
+      "id": 1,
+      "name": "Sala de reuniones",
+      "description": "Una sala de reuniones para 10 personas",
+      "capacity": 10,
+      "updated_at": "2024-12-18T01:01:32.000000Z",
+      "created_at": "2024-12-18T01:01:32.000000Z"
+    }
+    ```
+- **Respuestas erroneas**:
+- En caso de crear un recurso existente:
+ - **Código**: `400 Bad Request`
+ - **Cuerpo**:
+   ```json
+   {
+    "error": {
+        "message": "A resource with this name already exists.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:02:32"
+            }
+    }
+   ```
+- En caso de no pasar los parametros:
+ - **Código**: `500 Internal Server Error`
+ - **Cuerpo**:
+   ```json
+     {
+    "success": false,
+    "message": "Something went wrong."
+    }
+   ```
+
+#### Actualizar un recurso
+- **URL**: `/api/resources/{id}`
+- **Método**: `PUT`
+- **Descripción**: Actualiza un recurso existente.
+- **Parámetros**:
+  - `name` (string): Nuevo nombre del recurso.
+  - `description` (string): Nueva descripción del recurso.
+  - `capacity` (integer): Nueva capacidad del recurso.
+- **Respuesta Exitosa**:
+  - **Código**: `200 OK`
+  - **Cuerpo**: 
+    ```json
+    {
+    "id": 1,
+    "name": "Sala de reuniones",
+    "description": "Una sala de reuniones para 9 personas",
+    "capacity": 9,
+    "created_at": "2024-12-18T01:01:32.000000Z",
+    "updated_at": "2024-12-18T01:10:23.000000Z"
+    }
+    ```
+  - **Respuesta erronea**:
+   - **Código**: `200 OK`
+   - **Cuerpo**: 
+    ```json
+    {
+    "error": {
+        "message": "Resource not found.",
+        "status": 404,
+        "timestamp": "2024-12-18 01:10:54"
+        }
+    }
+    ```
+    
+#### Verificar disponibilidad de un recurso
+- **URL**: `/api/resources/{id}/availability?datetime=YYYY-MM-DD%20HH:MM:SS&duration=HH:MM:SS`
+- **Ejemplo de URL**: `http://127.0.0.1:8000/api/resources/1/availability?datetime=2024-12-17 14:00:00&duration=01:00:00`
+- **Método**: `GET`
+- **Descripción**: Verifica si un recurso está disponible en un horario dado, ignora las reservaciones canceladas.
+- **Respuestas Exitosas**:
+ - **Si esta disponible el recurso para esa fecha y hora**:     
+   - **Código**: `200 OK`
+   - **Cuerpo**: 
+     ```json
+     {
+       "available": true
+     }
+     ```
+ - ** Si no esta disponible el recurso para esa fecha y hora**
+  - **Código**: `200 OK`
+  - **Cuerpo**: 
+    ```json
+    {
+      "available": false
+    }
+    ```
+ - **Respuestas erroneas segun el caso de que sea festivo o este fuera de horario para la reserva**
+  - **Código**: `400 Bad Request`
+  - **Cuerpo**:
+    ```json
+    {
+    "error": {
+        "message": "Resource is not available on weekends.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:21:31"
+        }
+    }
+    ```
+    - Tambien puede devolver un cuerpo como este segun el horario establecido, en este caso es de 9:00 AM a 6:00 PM:
+    - **Código**: `400 Bad Request`
+    - **Cuerpo**:
+      ```json
+      {
+        "error": {
+        "message": "Resource is only available between 9:00 AM and 6:00 PM.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:22:58"
+          }
+        }
+
+### Reservas
+#### Crear una nueva reserva
+- **URL**: `/api/reservations`
+- **Método**: `POST`
+- **Descripción**: Crea una nueva reserva para un recurso.
+- **Parámetros**:
+  - `resource_id` (integer, requerido): ID del recurso a reservar.
+  - `reserved_at` (datetime, requerido): Fecha y hora de la reserva.
+  - `duration` (string, requerido): Duración de la reserva en formato `HH:MM:SS`.
+- **Respuesta Exitosa**:
+  - **Código**: `201 Created`
+  - **Cuerpo**: 
+    ```json
+    {
+      "id": 1,
+      "resource_id": 1,
+      "reserved_at": "2024-12-19T14:00:00",
+      "duration": "01:00:00",
+      "status": "pending",
+      "updated_at": "2024-12-18T01:27:57.000000Z",
+       "created_at": "2024-12-18T01:27:57.000000Z"
+    }
+    ```
+ - **Respuestas erroneas**:
+  - En su mayoria son las mismas respuestas que devuelve el endpoint para validar si esta disponible en un horario, excepto si intentas reservar en un horario reservado
+  - **Código** `400 Bad Request`
+  - **Cuerpo**:
+    ```json
+    {
+    "error": {
+        "message": "The resource is not available at the selected time.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:27:21"
+        }
+    }
+
+#### Confirmar una reserva
+- **URL**: `/api/reservations/{id}/confirm`
+- **Método**: `PUT`
+- **Descripción**: Confirma una reserva existente.
+- **Respuesta Exitosa**:
+  - **Código**: `200 OK`
+  - **Cuerpo**: 
+    ```json
+    {
+    "message": "Reservation confirmed successfully.",
+    "reservation": {
+        "id": 1,
+        "resource_id": 1,
+        "reserved_at": "2024-12-19 10:00:00",
+        "duration": "05:00:00",
+        "status": "confirmed",
+        "created_at": "2024-12-18T01:19:52.000000Z",
+        "updated_at": "2024-12-18T01:29:35.000000Z"
+        }
+    }
+    ```
+- **Respuestas erroneas en caso de que no exista la reservacion o ya este confirmada**:
+ - **Código**: `400 Bad Request`
+ - **Cuerpo**:
+   ```json
+   {
+    "error": {
+        "message": "The reservation is already confirmed.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:30:19"
+        }
+    }
+ - **Si no existe la reservacion**:
+ - **Código**: `400 Bad Request`
+ - **Cuerpo**:
+   ```json
+    {
+    "error": {
+        "message": "Reservation not found.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:32:27"
+        }
+    }
+   
+#### Cancelar una reserva
+- **URL**: `/api/reservations/{id}`
+- **Método**: `DELETE`
+- **Descripción**: Aunque es un metodo delete no elimina la reserva, hace un softdelete cambiando el estado a cancelada.
+- **Respuesta Exitosa**:
+  - **Código**: `200 OK`
+  - **Cuerpo**: 
+    ```json
+    {
+      "message": "Reservation successfully canceled.",
+      "success": true
+    }
+    ```
+- **Respuesta erronea**
+ - **Código**: `400 Bad Request`
+ - **Cuerpo**:
+   ```json
+    {
+    "error": {
+        "message": "Reservation not found.",
+        "status": 400,
+        "timestamp": "2024-12-18 01:32:27"
+        }
+    }
+ 
+          
+
+
+
 
