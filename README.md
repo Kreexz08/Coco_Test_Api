@@ -199,7 +199,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
        "available": true
      }
      ```
- - ** Si no esta disponible el recurso para esa fecha y hora**
+ - ** Si no esta disponible el recurso para esa fecha y hora**:
   - **Código**: `200 OK`
   - **Cuerpo**: 
     ```json
