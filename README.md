@@ -8,26 +8,26 @@ Este proyecto es una API desarrollada con Laravel que gestiona recursos comparti
 
 El proyecto sigue una estructura de directorios estándar de Laravel, con algunas carpetas adicionales para organizar mejor el código:
 
-```plaintext
-├── app
-│   ├── Contracts
-│   ├── Exceptions
-│   ├── Factories
-│   ├── Http
-│   ├── Models
-│   ├── Providers
-│   ├── Repositories
-│   ├── Services
-│   └── Traits
-├── bootstrap
-├── config
-├── database
-├── public
-├── resources
-├── routes
-├── storage
-├── tests
-└── vendor
+    ```plaintext
+    ├── app
+    │   ├── Contracts
+    │   ├── Exceptions
+    │   ├── Factories
+    │   ├── Http
+    │   ├── Models
+    │   ├── Providers
+    │   ├── Repositories
+    │   ├── Services
+    │   └── Traits
+    ├── bootstrap
+    ├── config
+    ├── database
+    ├── public
+    ├── resources
+    ├── routes
+    ├── storage
+    ├── tests
+    └── vendor
 
 
 ### Diseño del Sistema
