@@ -336,9 +336,4 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
          "timestamp": "2024-12-18 01:32:27"
          }
      }
- 
-          
-
-
-
-
+    ```
