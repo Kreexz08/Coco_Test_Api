@@ -243,7 +243,7 @@ El sistema está diseñado utilizando una arquitectura basada en componentes cla
 - **Parámetros**:
   - `resource_id` (integer, requerido): ID del recurso a reservar.
   - `reserved_at` (datetime, requerido): Fecha y hora de la reserva.
-  - `duration` (string, requerido): Duración de la reserva en formato `HH:MM:SS`.
+  - `duration` (time, requerido): Duración de la reserva en formato `HH:MM:SS`.
 - **Respuesta Exitosa**:
   - **Código**: `201 Created`
   - **Cuerpo**: 
